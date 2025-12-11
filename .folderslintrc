@@ -1,27 +1,19 @@
 {
 	"rules": [
 		".devcontainer",
-		".devcontainer/ops",
-		".devcontainer/ops/assets",
 
-		".github",
 		".github/workflows",
 		".github/workflows/assets",
 
-        ".assets",
-
         ".task/**",
-
 		".vscode",
+        ".vagrant/**",
 
-		"docs",
-		"docs/_assets/**",
-		"docs/about/**",
-		"docs/usage/**",
-		"target/docs/site/**",
-
-		"node_modules/**",
-		"public/**",
-		"target/**"
+        "ansible/roles/*/*/defaults",
+        "ansible/roles/*/*/files",
+        "ansible/roles/*/*/tasks",
+        "ansible/roles/*/*/templates",
+        "ansible/roles/*/*/vars",
+        "ansible/roles/ansible-roles-collection/tests/**"
 	]
 }

@@ -53,7 +53,7 @@ jobs:
   set-issue-labels:
     name: Set label for issues (if not story)
     runs-on: ubuntu-latest
-    if: "${{ github.event.issue && !contains(github.event.issue.labels.*.name, 'story') }}"
+    if: ${{ github.event.issue && !contains(github.event.issue.labels.*.name, 'story') }}
     steps:
       - name: Set label
         uses: actions/github-script@v8

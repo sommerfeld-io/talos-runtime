@@ -1,5 +1,5 @@
 {
-    "name": "template-repository",
+    "name": "talos-runtime",
     "build": {
         "dockerfile": "Dockerfile"
     },

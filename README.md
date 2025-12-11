@@ -1,8 +1,8 @@
 # Template Repository
 
-[doc-website]: https://sommerfeld-io.github.io/template-repository
-[github-repo]: https://github.com/sommerfeld-io/template-repository
-[file-issues]: https://github.com/sommerfeld-io/template-repository/issues
+[doc-website]: https://sommerfeld-io.github.io/talos-runtime
+[github-repo]: https://github.com/sommerfeld-io/talos-runtime
+[file-issues]: https://github.com/sommerfeld-io/talos-runtime/issues
 [project-board]: https://github.com/orgs/sommerfeld-io/projects/1/views/1
 
 This project is a template repository for creating new repositories with a pre-defined structure. This template repository is relevant for [sommerfeld.io](https://github.com/sommerfeld-io) projects.
@@ -12,7 +12,7 @@ This project is a template repository for creating new repositories with a pre-d
 
 - [Documentation Website][doc-website]
 - [Github Repository][github-repo]
-- [Sonarcloud Code Quality and Security Analysis](https://sonarcloud.io/project/overview?id=sommerfeld-io_template-repository)
+- [Sonarcloud Code Quality and Security Analysis](https://sonarcloud.io/project/overview?id=sommerfeld-io_talos-runtime)
 - [Where to file issues][file-issues]
 - [Project Board for Issues and Pull Requests][project-board]
 
