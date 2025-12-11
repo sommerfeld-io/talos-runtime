@@ -16,15 +16,17 @@ A reproducible local development environment for Kubernetes using Talos Linux ru
 - Resource control: allocate CPU/RAM to the VM and avoid interfering with host usage
 - Reusable infrastructure: the same provisioning code can later be applied to bare-metal or cloud VMs
 
-## Recommended Node Sizing (single VM hosting all nodes)
+## Kubernetes Nodes and recommended Node Sizing
+
+These are conservative recommendations targeted at local development.
 
 | Node Type | Count | RAM (each) | CPU (each) | Purpose |
 |---|---:|---:|---:|---|
-| Control Plane | 1 | 2–4 GB | 2 vCPUs | Kubernetes control plane, etcd, Talos API |
+| Control Plane | 1 | 2–4 GB | 2 vCPU | k8s control plane, etcd, Talos API |
 | Worker (general) | 2 | 2 GB | 1 vCPU | Application workloads |
-| Worker (management) | 1 | 3 GB | 2 vCPUs | ArgoCD, Prometheus, Grafana, Loki, etc. |
+| Worker (mgmt) | 1 | 3 GB | 2 vCPU | ArgoCD, Prometheus, Grafana, Loki, etc. |
 
-> **:bulb: NOTE:** These are conservative recommendations targeted at local development. The VM must have enough resources to host all Talos node containers.
+Remember to allocate enough resources to the VM itself to run the host OS and all the Talos node containers.
 
 ## Prerequisites
 
