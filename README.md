@@ -16,7 +16,7 @@ A reproducible local development environment for Kubernetes using Talos Linux ru
 - Resource control: allocate CPU/RAM to the VM and avoid interfering with host usage
 - Reusable infrastructure: the same provisioning code can later be applied to bare-metal or cloud VMs
 
-## Kubernetes Nodes and recommended Node Sizing
+## Kubernetes nodes and recommended node sizing
 
 These are conservative recommendations targeted at local development.
 
