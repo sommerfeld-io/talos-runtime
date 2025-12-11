@@ -36,19 +36,20 @@ ls:
   .shellcheckrc: lowercase
 
 ignore:
+  - ansible/roles/ansible-roles-collection
+
   # commons
+  - .ansible
   - .git
   - .idea
+  - .task
+  - .vagrant
   - .vscode
   - node_modules
-  - target/docs/site
   - target
-
-  - .task
 
   # linter definitions etc.
   - .editorconfig
-  - .hadolint.yml
   - .lychee.toml
   - .ls-lint.yml
   - .markdownlint.yml

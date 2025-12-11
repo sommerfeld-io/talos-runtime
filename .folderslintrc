@@ -10,10 +10,13 @@
         ".vagrant/**",
 
         "ansible/roles/*/*/defaults",
-        "ansible/roles/*/*/files",
-        "ansible/roles/*/*/tasks",
+        "ansible/roles/*/*/files/**",
+        "ansible/roles/*/*/tasks/**",
         "ansible/roles/*/*/templates",
         "ansible/roles/*/*/vars",
-        "ansible/roles/ansible-roles-collection/tests/**"
+        "ansible/roles/ansible-roles-collection/tests/**",
+
+        "manifests",
+        "helmcharts"
 	]
 }

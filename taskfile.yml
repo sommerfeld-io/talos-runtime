@@ -40,7 +40,7 @@ tasks:
       - find . -type f -exec chmod +r {} +
       - find . -type d -exec chmod +r {} +
       - find . -name "*.sh" -type f -exec chmod +x {} +
-      # - git submodule update --remote
+      - git submodule update --remote
 
   # ===============================================================================================
 
@@ -51,3 +51,27 @@ tasks:
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
 
   # ===============================================================================================
+
+  vagrant:start:
+    desc: Start Vagrantbox
+    cmds:
+      - vagrant validate
+      - task: vagrant:stop
+      - vagrant up
+      - task: vagrant:ssh
+
+  vagrant:stop:
+    desc: Halt Vagrantbox
+    cmds:
+      - vagrant halt
+
+  vagrant:ssh:
+    desc: SSH into Vagrantbox
+    cmds:
+      - vagrant ssh
+
+  vagrant:remove:
+    desc: Remove Vagrantbox and associated files
+    cmds:
+      - vagrant destroy -f
+      - rm -rf .vagrant
