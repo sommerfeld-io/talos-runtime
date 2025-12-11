@@ -1,0 +1,36 @@
+{
+    "name": "template-repository",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+
+    "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "streetsidesoftware.code-spell-checker",
+                "asciidoctor.asciidoctor-vscode",
+                "ms-azuretools.vscode-containers",
+                "aaron-bond.better-comments",
+                "timonwong.shellcheck",
+                "jebbs.plantuml",
+                "github.vscode-github-actions",
+                "redhat.vscode-yaml",
+                "GitHub.copilot",
+                "golang.go",
+                "alexkrechik.cucumberautocomplete",
+                "DavidAnson.vscode-markdownlint",
+                "EditorConfig.EditorConfig",
+                "tamasfe.even-better-toml",
+                "task.vscode-task"
+            ]
+        }
+    },
+
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2.12.0": {}
+    },
+
+    "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/post-create.sh",
+    "postStartCommand": "${containerWorkspaceFolder}/.devcontainer/post-start.sh"
+}
