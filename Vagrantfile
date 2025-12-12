@@ -16,15 +16,34 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--groups", "/vagrantboxes"]
   end
 
+  ## VM-specific setup tasks which most likely are not needed when installing directly on the host
+  ## Ubuntu. This is done outside of Ansible to keep the playbook more generic and to bring the VM
+  ## to a good base state before Ansible runs.
   config.vm.provision "shell", inline: <<-SHELL
-    export DEBIAN_FRONTEND=noninteractive
-
     apt-get update
     apt-get install -y curl
     apt-get autoremove -y
     apt-get autoclean
   SHELL
 
+  ## Allow the kernel to filter and process network traffic passing through bridge interfaces, not
+  ## just routed traffic. Enable iptables rules to work on bridged traffic (required by Kubernetes
+  ## networking).
+  ##
+  ## Kubernetes (and therefore Talos) relies on iptables to manage network policies and service
+  ## networking. Without `br_netfilter`, iptables rules don't apply to traffic crossing bridge
+  ## interfaces, which breaks:
+  ## - Pod-to-pod communication
+  ## - Service networking
+  ## - Network policies
+  ## - CoreDNS (which runs in a pod)
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo modprobe br_netfilter
+  SHELL
+
+  ## Ansible Provisioning with basic configuration, installing dependencies as well as all components
+  ## required to run and interact with Kubernetes in Talos. The Talos cluster and adjacent tools are
+  ## configured and started as well.
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/playbook.yml"
     ansible.extra_vars = {

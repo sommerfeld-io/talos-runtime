@@ -70,8 +70,9 @@ tasks:
     cmds:
       - vagrant ssh
 
-  vagrant:remove:
+  vagrant:destroy:
     desc: Remove Vagrantbox and associated files
     cmds:
+      - task: vagrant:stop
       - vagrant destroy -f
       - rm -rf .vagrant
