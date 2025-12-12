@@ -15,6 +15,7 @@
         "ansible/roles/*/*/templates",
         "ansible/roles/*/*/vars",
         "ansible/roles/ansible-roles-collection/tests/**",
+        "ansible/tasks/files",
 
         "manifests",
         "helmcharts"

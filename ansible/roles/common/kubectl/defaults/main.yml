@@ -1,3 +1,3 @@
 ---
-kubectl_architecture: amd64
-kubectl_version: v1.34.0
+common_architecture: amd64
+common_version: v1.34.0

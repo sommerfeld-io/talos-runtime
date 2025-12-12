@@ -1,18 +1,30 @@
 ---
-- name: kubectl  ----  Download binary
+- name: Kubectl  ----  Download binary
   ansible.builtin.get_url:
-    url: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/{{ kubectl_architecture }}/kubectl"
+    url: "https://dl.k8s.io/release/{{ common_version }}/bin/linux/{{ common_architecture }}/kubectl"
     dest: /usr/local/bin/kubectl
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: u=rwx,g=rx,o=rx
 
-- name: kubectl  ----  Check version
+- name: Kubectl  ----  Check version
   ansible.builtin.shell: kubectl version --client
   args:
     executable: /bin/bash
-  register: kubectl_version_output
+  register: common_version_output
 
-- name: kubectl  ----  Display version
+- name: Kubectl  ----  Display version
   ansible.builtin.debug:
-    msg: "kubectl installed successfully: {{ kubectl_version_output.stdout_lines }}"
+    msg: "kubectl installed successfully: {{ common_version_output.stdout_lines }}"
+
+- name: Kubectl  ----  Write aliases to .bashrc
+  ansible.builtin.lineinfile:
+    create: true
+    mode: u=rw,g=,o=
+    dest: "/home/{{ ansible_user }}/.bashrc"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - alias k="kubectl"

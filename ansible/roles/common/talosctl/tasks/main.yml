@@ -1,18 +1,30 @@
 ---
-- name: talosctl  ----  Download binary
+- name: Talosctl  ----  Download binary
   ansible.builtin.get_url:
-    url: "https://github.com/siderolabs/talos/releases/download/{{ talosctl_version }}/talosctl-linux-{{ talosctl_architecture }}"
+    url: "https://github.com/siderolabs/talos/releases/download/{{ common_version }}/talosctl-linux-{{ common_architecture }}"
     dest: /usr/local/bin/talosctl
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: u=rwx,g=rx,o=rx
 
-- name: talosctl  ----  Check version
+- name: Talosctl  ----  Check version
   ansible.builtin.shell: talosctl version --client
   args:
     executable: /bin/bash
-  register: talosctl_version_output
+  register: common_version_output
 
-- name: talosctl  ----  Display version
+- name: Talosctl  ----  Display version
   ansible.builtin.debug:
-    msg: "talosctl installed successfully: {{ talosctl_version_output.stdout_lines }}"
+    msg: "talosctl installed successfully: {{ common_version_output.stdout_lines }}"
+
+- name: Talosctl  ----  Write aliases to .bashrc
+  ansible.builtin.lineinfile:
+    create: true
+    mode: u=rw,g=,o=
+    dest: "/home/{{ ansible_user }}/.bashrc"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    line: "{{ item }}"
+    state: present
+  with_items:
+    - alias t="talosctl"

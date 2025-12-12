@@ -1,0 +1,28 @@
+---
+# See https://ansible.readthedocs.io/projects/lint/configuring
+# https://ansible.readthedocs.io/projects/lint/profiles
+profile: basic
+
+var_naming_pattern: "^[a-z_][a-z0-9_]*$"
+
+use_default_rules: false
+
+enable_list:
+  - no-log-password
+  - no-same-owner
+  - yaml
+
+warn_list:
+  - args
+  - command-instead-of-module
+  - empty-string-compare
+  - latest[git]
+  - name[missing]
+  - no-changed-when
+  - package-latest
+
+skip_list:
+  - yaml[line-length]
+  - role-name[path]
+
+offline: true

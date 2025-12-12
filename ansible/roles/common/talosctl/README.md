@@ -18,5 +18,5 @@ The following variables are optional and have default values:
 
 | Variable                      | Description | Default |
 |-------------------------------|-------------|---------|
-| `{{ talosctl_architecture }}` | Install for desktop (`amd64`) or Raspberry Pi (`arm64`). | `amd64` |
-| `{{ talosctl_version }}`      | Version of `talosctl` to install. | `v1.10.8` |
+| `{{ common_architecture }}` | Install for desktop (`amd64`) or Raspberry Pi (`arm64`). | `amd64` |
+| `{{ common_version }}`      | Version of `talosctl` to install. | `v1.10.8` |

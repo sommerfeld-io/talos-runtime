@@ -49,10 +49,12 @@ ignore:
   - target
 
   # linter definitions etc.
+  - .ansible-lint.yml
   - .editorconfig
-  - .lychee.toml
+  - .kube-linter.yml
   - .ls-lint.yml
+  - .lychee.toml
   - .markdownlint.yml
-  - .yamllint.yml
   - .pre-commit-config.yaml
   - .releaserc.js
+  - .yamllint.yml

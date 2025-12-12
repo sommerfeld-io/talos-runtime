@@ -1,0 +1,35 @@
+---
+- name: ArgoCD Autopilot  ----  Download tarball
+  ansible.builtin.get_url:
+    url: "https://github.com/argoproj-labs/argocd-autopilot/releases/download/{{ common_version }}/argocd-autopilot-linux-{{ common_architecture }}.tar.gz"
+    dest: /tmp/argocd-autopilot.tar.gz
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: u=rwx,g=rx,o=rx
+
+- name: ArgoCD Autopilot  ----  Extract tarball
+  ansible.builtin.unarchive:
+    src: /tmp/argocd-autopilot.tar.gz
+    dest: /tmp
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    remote_src: true
+
+- name: ArgoCD Autopilot  ----  Move to /usr/local/bin
+  ansible.builtin.copy:
+    src: /tmp/argocd-autopilot-linux-{{ common_architecture }}
+    dest: /usr/local/bin/argocd-autopilot
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: u=rwx,g=rx,o=rx
+    remote_src: true
+
+- name: ArgoCD Autopilot  ----  Check version
+  ansible.builtin.shell: argocd-autopilot version
+  args:
+    executable: /bin/bash
+  register: common_version_output
+
+- name: ArgoCD Autopilot  ----  Display version
+  ansible.builtin.debug:
+    msg: "argocd-autopilot installed successfully: {{ common_version_output.stdout_lines }}"

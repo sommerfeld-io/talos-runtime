@@ -43,6 +43,16 @@ Use the `taskfile.yml` from the project root of this repository to start, stop, 
 
 To interact with the Talos cluster, `ssh` into the VM and use the `taskfile.yml` from inside the VM. Or use `talosctl` and `kubectl` inside the VM directly.
 
+When using `talosctl` directly, remember that most commands need the `--nodes` flag to point to the correct Talos node(s).
+
+```bash
+# Get IP addresses of Talos nodes
+kubectl get nodes -o wide
+
+# List images on a specific Talos node
+talosctl images list --nodes <IP_ADDRESS>
+```
+
 ## Deployment Flow (GitOps with ArgoCD)
 
 1. Developer edits Kubernetes manifests locally and pushes commits to a Git repo.

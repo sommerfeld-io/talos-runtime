@@ -1,0 +1,4 @@
+# TODO ... taskfile in VM
+# TODO ... remove global taskfile if exists???
+# TODO ... remove docker-stacks!!!
+# TODO ... then put new global taskfile specific for talos
