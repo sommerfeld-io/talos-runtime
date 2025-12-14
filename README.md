@@ -17,18 +17,6 @@ A reproducible local development environment for Kubernetes using Talos Linux ru
 - Reusable infrastructure: the same provisioning code can later be applied to bare-metal or cloud VMs
 - Since the VM is disposable, it can act as a testing ground for Talos updates and configuration changes. All packages needed to work with Talos can still be installed on the host OS directly through Ansible.
 
-## Kubernetes nodes and recommended node sizing
-
-These are conservative recommendations targeted at local development.
-
-| Node Type | Count | RAM (each) | CPU (each) | Purpose |
-|---|---:|---:|---:|---|
-| Control Plane | 1 | 2–4 GB | 2 vCPU | k8s control plane, etcd, Talos API |
-| Worker (general) | 2 | 2 GB | 1 vCPU | Application workloads |
-| Worker (mgmt) | 1 | 3 GB | 2 vCPU | ArgoCD, Prometheus, Grafana, Loki, etc. |
-
-Remember to allocate enough resources to the VM itself to run the host OS and all the Talos node containers.
-
 ## Prerequisites
 
 - On the host machine:

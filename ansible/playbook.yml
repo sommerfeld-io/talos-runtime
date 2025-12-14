@@ -39,8 +39,3 @@
         name: roles/common/argocd-autopilot
     - ansible.builtin.include_role:
         name: roles/common/override-taskfile
-
-# TODO ... play with roles or tasks to configure and start talos in docker using talosctl inside vagrantbox
-# TODO ... from ansible/roles/talos-config
-# TODO ... does `talosctl cluster create` take too much time? does it work headless?
-# TODO ... should i optimize ubuntu for performance first? faster download times for apt and docker images?
