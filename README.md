@@ -15,6 +15,7 @@ A reproducible local development environment for Kubernetes using Talos Linux ru
 - Disposable environment: destroy and recreate the VM + cluster quickly
 - Resource control: allocate CPU/RAM to the VM and avoid interfering with host usage
 - Reusable infrastructure: the same provisioning code can later be applied to bare-metal or cloud VMs
+- Since the VM is disposable, it can act as a testing ground for Talos updates and configuration changes. All packages needed to work with Talos can still be installed on the host OS directly through Ansible.
 
 ## Kubernetes nodes and recommended node sizing
 

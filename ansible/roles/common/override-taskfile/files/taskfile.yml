@@ -1,0 +1,28 @@
+---
+version: '3.42.1'
+
+tasks:
+
+  cluster:create:
+    desc: Create a Talos cluster using talosctl
+    summary: |
+      Creates a Talos cluster using talosctl with the following configuration:
+
+      - 1x Control Plane (CPU: 2.0, Memory: 2048MB)
+      - 1x Worker Node (CPU: 2.0, Memory: 2048MB)
+
+      All nodes are created as Docker containers.
+    cmds:
+      - talosctl cluster create --cpus 2.0 --cpus-workers 2.0 --memory 2048 --memory-workers 2048
+
+  cluster:destroy:
+    desc: Destroy a Talos cluster using talosctl
+    cmds:
+      - talosctl cluster destroy
+
+  info:
+    desc: Create a Talos cluster using talosctl
+    cmds:
+      - talosctl config info
+      - talosctl cluster show
+      - kubectl get nodes -o wide

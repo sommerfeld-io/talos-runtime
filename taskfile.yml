@@ -52,15 +52,15 @@ tasks:
 
   # ===============================================================================================
 
-  vagrant:start:
+  vagrant:up:
     desc: Start Vagrantbox
     cmds:
       - vagrant validate
-      - task: vagrant:stop
+      - task: vagrant:halt
       - vagrant up
       - task: vagrant:ssh
 
-  vagrant:stop:
+  vagrant:halt:
     desc: Halt Vagrantbox
     cmds:
       - vagrant halt
@@ -73,6 +73,6 @@ tasks:
   vagrant:destroy:
     desc: Remove Vagrantbox and associated files
     cmds:
-      - task: vagrant:stop
+      - task: vagrant:halt
       - vagrant destroy -f
       - rm -rf .vagrant

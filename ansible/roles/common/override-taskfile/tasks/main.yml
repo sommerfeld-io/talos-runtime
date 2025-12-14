@@ -1,0 +1,17 @@
+---
+- name: Override Taskfile  ----  Remove original taskfile
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /home/{{ ansible_user }}/taskfile.yml
+
+- name: Override Taskfile  ----  Copy Talos-specific Taskfile
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: u=rw,g=r,o=r
+  loop:
+    - { src: "../files/taskfile.yml", dest: "/home/{{ ansible_user }}/taskfile.yml" }

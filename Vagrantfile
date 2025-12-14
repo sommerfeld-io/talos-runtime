@@ -11,8 +11,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.name = HOSTNAME
     vb.gui = false
-    vb.cpus = 4
-    vb.memory = 4096
+    vb.cpus = 5
+    vb.memory = 4 * 1024 + 512
     vb.customize ["modifyvm", :id, "--groups", "/vagrantboxes"]
   end
 
