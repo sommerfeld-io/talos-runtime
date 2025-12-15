@@ -20,24 +20,26 @@ tasks:
     cmds:
       - talosctl cluster destroy
 
-  info:
+  cluster:info:
     desc: Create a Talos cluster using talosctl
     cmds:
       - talosctl config info
       - talosctl cluster show
       - kubectl get nodes -o wide
 
+  # ===============================================================================================
+
   kubectl:port-forward:*:*:*:*:
     desc: Port-forward a Kubernetes service to localhost
     summary: |
       Port-forwards a Kubernetes service to localhost.
 
-      - Param 1: Namespace of the service
-      - Param 2: Name of the service
-      - Param 3: Local port to forward to
-      - Param 4: Remote port of the service
+      - Param 0: Namespace of the service
+      - Param 1: Name of the service
+      - Param 2: Local port to forward to
+      - Param 3: Remote port of the service
 
-      When runnning in Vagrant, the local port must be 6000 to ensure the port is also forwarded to the host machine.
+      When running in Vagrant, the local port must be 6000 to ensure the port is also forwarded to the host machine.
     vars:
       NAMESPACE: '{{ index .MATCH 0 }}'
       SVC_NAME: '{{ index .MATCH 1 }}'
@@ -46,12 +48,49 @@ tasks:
     cmds:
       - kubectl -n {{ .NAMESPACE }} port-forward --address 0.0.0.0 svc/{{ .SVC_NAME }} {{ .LOCAL_PORT }}:{{ .REMOTE_PORT }}
 
-  helm:install:echoserver:
+  # ===============================================================================================
+
+  app:echoserver:install:
     desc: Install echoserver Helm chart
     cmds:
       - helm install echoserver /vagrant/helmcharts/echoserver
 
-  helm:uninstall:echoserver:
+  app:echoserver:uninstall:
     desc: Uninstall echoserver Helm chart
     cmds:
       - helm uninstall echoserver
+
+  # ===============================================================================================
+
+  app:kubernetes-dashboard:install:
+    desc: Install Kubernetes Dashboard Helm chart
+    summary: |
+      Installs the Kubernetes Dashboard Helm chart from the official repository.
+
+      See <https://github.com/kubernetes/dashboard>
+    vars:
+      APP: kubernetes-dashboard
+    cmds:
+      - helm repo add {{ .APP }} https://kubernetes.github.io/dashboard
+      - helm upgrade --install {{ .APP }} {{ .APP }}/{{ .APP }} --create-namespace --namespace {{ .APP }}
+
+  app:kubernetes-dashboard:uninstall:
+    desc: Uninstall Kubernetes Dashboard Helm chart
+    vars:
+      APP: kubernetes-dashboard
+    cmds:
+      - helm uninstall {{ .APP }}
+
+  app:kubernetes-dashboard:port-forward:*:
+    desc: Port-forward Kubernetes Dashboard service to localhost
+    summary: |
+      Exposes the Kubernetes Dashboard service to localhost via port-forwarding.
+
+      - Param 0: Local port to forward to
+
+      When running in Vagrant, the local port must be 6000 to ensure the port is also forwarded to the host machine.
+    vars:
+      LOCAL_PORT: '{{ index .MATCH 0 }}'
+      APP: kubernetes-dashboard
+    cmds:
+      - kubectl -n {{ .APP }} port-forward  --address 0.0.0.0 svc/{{ .APP }}-kong-proxy {{ .LOCAL_PORT }}:443
