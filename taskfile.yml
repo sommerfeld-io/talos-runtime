@@ -12,7 +12,7 @@ includes:
 tasks:
 
   sync:assets-from-github:
-    desc: 'Sync assets from the central sommerfeldio/.github repository'
+    desc: Sync assets from the central sommerfeldio/.github repository
     cmds:
       - echo "Syncing assets from the central sommerfeldio/.github repository..."
       - task: common:download
@@ -28,8 +28,13 @@ tasks:
 
   # ===============================================================================================
 
+  update:
+    desc: Update project dependencies and submodules
+    cmds:
+      - git submodule update --remote
+
   cleanup:
-    desc: 'Cleanup the environment'
+    desc: Cleanup the environment
     cmds:
       - docker compose down --remove-orphans
       - rm -rf .cache
@@ -40,12 +45,12 @@ tasks:
       - find . -type f -exec chmod +r {} +
       - find . -type d -exec chmod +r {} +
       - find . -name "*.sh" -type f -exec chmod +x {} +
-      - git submodule update --remote
+      - task: update
 
   # ===============================================================================================
 
   lint:
-    desc: 'Run all project linters outside of Dockerfile linters'
+    desc: Run all project linters outside of Dockerfile linters
     cmds:
       - for: ['yaml', 'filenames', 'folders', 'ansible'] # , 'workflows', 'markdown-links', 'helm', 'k8s-manifests']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
