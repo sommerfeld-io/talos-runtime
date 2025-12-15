@@ -20,13 +20,24 @@ tasks:
     cmds:
       - talosctl cluster destroy
 
+  cluster:apps:install-all:
+    desc: Install all applications on the Talos cluster
+    cmds:
+      - task: app:echoserver:install
+      - task: app:kubernetes-dashboard:install
+
   cluster:info:
-    desc: Create a Talos cluster using talosctl
+    desc: Display information about the Talos cluster
     cmds:
       - talosctl config info
       - talosctl cluster show
-      - kubectl get nodes -o wide
+      - task: cluster:info:nodes
       - task: helm:list
+
+  cluster:info:nodes:
+    desc: Display information about the Talos cluster nodes
+    cmds:
+      - kubectl get nodes -o wide
 
   helm:list:
     desc: List all Helm releases across all namespaces
