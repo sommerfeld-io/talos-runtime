@@ -6,7 +6,7 @@ tasks:
   cluster:create:
     desc: Create a Talos cluster using talosctl
     summary: |
-      Creates a Talos cluster using talosctl with the following configuration:
+      Create a Talos cluster using talosctl with the following configuration:
 
       - 1x Control Plane (CPU: 2.0, Memory: 2048MB)
       - 1x Worker Node (CPU: 2.0, Memory: 2048MB)
@@ -26,20 +26,26 @@ tasks:
       - talosctl config info
       - talosctl cluster show
       - kubectl get nodes -o wide
+      - task: helm:list
+
+  helm:list:
+    desc: List all Helm releases across all namespaces
+    cmds:
+      - helm list --all-namespaces
 
   # ===============================================================================================
 
   kubectl:port-forward:*:*:*:*:
     desc: Port-forward a Kubernetes service to localhost
     summary: |
-      Port-forwards a Kubernetes service to localhost.
+      Port-forward a Kubernetes service to localhost.
 
       - Param 0: Namespace of the service
       - Param 1: Name of the service
       - Param 2: Local port to forward to
       - Param 3: Remote port of the service
 
-      When running in Vagrant, the local port must be 6000 to ensure the port is also forwarded to the host machine.
+      When running in Vagrant, the local port must be 8000 to ensure the port is also forwarded to the host machine.
     vars:
       NAMESPACE: '{{ index .MATCH 0 }}'
       SVC_NAME: '{{ index .MATCH 1 }}'
@@ -52,45 +58,63 @@ tasks:
 
   app:echoserver:install:
     desc: Install echoserver Helm chart
+    vars:
+      APP: echoserver
     cmds:
-      - helm install echoserver /vagrant/helmcharts/echoserver
+      - helm install {{ .APP }} /vagrant/helmcharts/{{ .APP }}  --create-namespace --namespace {{ .APP }}
 
   app:echoserver:uninstall:
     desc: Uninstall echoserver Helm chart
+    vars:
+      APP: echoserver
     cmds:
-      - helm uninstall echoserver
+      - helm uninstall {{ .APP }} --namespace {{ .APP }}
+
+  app:echoserver:port-forward:*:
+    desc: Port-forward echoserver service to localhost
+    summary: |
+      Expose the echoserver service to localhost via port-forwarding.
+
+      - Param 0: Local port to forward to
+
+      When running in Vagrant, the local port must be 8000 to ensure the port is also forwarded to the host machine.
+    vars:
+      LOCAL_PORT: '{{ index .MATCH 0 }}'
+    cmds:
+      - task: kubectl:port-forward:echoserver:echoserver:{{ .LOCAL_PORT }}:8080
 
   # ===============================================================================================
 
   app:kubernetes-dashboard:install:
     desc: Install Kubernetes Dashboard Helm chart
     summary: |
-      Installs the Kubernetes Dashboard Helm chart from the official repository.
-
-      See <https://github.com/kubernetes/dashboard>
+      Install the Kubernetes Dashboard Helm chart from the official repository (see <https://github.com/kubernetes/dashboard>).
+      Create a cluster role binding to grant the dashboard admin privileges. Needed to see data from all namespaces.
     vars:
       APP: kubernetes-dashboard
     cmds:
       - helm repo add {{ .APP }} https://kubernetes.github.io/dashboard
       - helm upgrade --install {{ .APP }} {{ .APP }}/{{ .APP }} --create-namespace --namespace {{ .APP }}
+      - kubectl create clusterrolebinding {{ .APP }}-kong-as-admin --clusterrole=cluster-admin --serviceaccount={{ .APP }}:{{ .APP }}-kong
 
   app:kubernetes-dashboard:uninstall:
     desc: Uninstall Kubernetes Dashboard Helm chart
     vars:
       APP: kubernetes-dashboard
     cmds:
-      - helm uninstall {{ .APP }}
+      - helm uninstall {{ .APP }} --namespace {{ .APP }}
 
   app:kubernetes-dashboard:port-forward:*:
     desc: Port-forward Kubernetes Dashboard service to localhost
     summary: |
-      Exposes the Kubernetes Dashboard service to localhost via port-forwarding.
+      Expose the Kubernetes Dashboard service to localhost via port-forwarding.
 
       - Param 0: Local port to forward to
 
-      When running in Vagrant, the local port must be 6000 to ensure the port is also forwarded to the host machine.
+      When running in Vagrant, the local port must be 8000 to ensure the port is also forwarded to the host machine.
     vars:
-      LOCAL_PORT: '{{ index .MATCH 0 }}'
       APP: kubernetes-dashboard
+      LOCAL_PORT: '{{ index .MATCH 0 }}'
     cmds:
-      - kubectl -n {{ .APP }} port-forward  --address 0.0.0.0 svc/{{ .APP }}-kong-proxy {{ .LOCAL_PORT }}:443
+      - kubectl -n {{ .APP }} create token {{ .APP }}-kong
+      - task: kubectl:port-forward:{{ .APP }}:{{ .APP }}-kong-proxy:{{ .LOCAL_PORT }}:443
