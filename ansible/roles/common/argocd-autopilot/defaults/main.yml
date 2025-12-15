@@ -1,3 +1,0 @@
----
-common_architecture: amd64
-common_version: v0.4.20 # https://github.com/argoproj-labs/argocd-autopilot/releases

@@ -1,6 +1,6 @@
-# Role: argocd-autopilot
+# Role: helm
 
-Install `argocd-autopilot`. For the time being, this role is used in the `talos` repository only. This repo provides a local development environment for Kubernetes using Talos.
+Install `helm`. For the time being, this role is used in the `talos` repository only. This repo provides a local development environment for Kubernetes using Talos.
 
 Even though usage is limited at the moment, this role supports all machines (RasPi and workstation).
 
@@ -19,4 +19,4 @@ The following variables are optional and have default values:
 | Variable                              | Description | Default |
 |---------------------------------------|-------------|---------|
 | `{{ common_architecture }}` | Install for desktop (`amd64`) or Raspberry Pi (`arm64`). | `amd64` |
-| `{{ common_version }}`      | Version of `argocd-autopilot` to install. | `v0.4.20` |
+| `{{ common_version }}`      | Version of `helm` to install. | `common_v4.0.4` |

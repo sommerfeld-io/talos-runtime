@@ -36,6 +36,6 @@
     - ansible.builtin.include_role:
         name: roles/common/talosctl
     - ansible.builtin.include_role:
-        name: roles/common/argocd-autopilot
+        name: roles/common/helm
     - ansible.builtin.include_role:
         name: roles/common/override-taskfile
