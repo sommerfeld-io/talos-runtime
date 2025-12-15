@@ -53,6 +53,7 @@ Vagrant.configure("2") do |config|
     }
   end
 
+  config.vm.network "forwarded_port", guest: 6000, host: 6000 # kubernetes port forwarding
   config.vm.network "forwarded_port", guest: 9990, host: 6990 # portainer
 
 end
