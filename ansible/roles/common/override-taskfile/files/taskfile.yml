@@ -4,27 +4,29 @@ version: '3.42.1'
 tasks:
 
   cluster:create:
-    desc: Create a Talos cluster using talosctl
+    desc: Create a Talos cluster and install all default applications
     summary: |
       Create a Talos cluster using talosctl with the following configuration:
 
-      - 1x Control Plane (CPU: 2.0, Memory: 2048MB)
-      - 1x Worker Node (CPU: 2.0, Memory: 2048MB)
+      - 1x Control Plane (CPU: {{ .CPU }}, Memory: {{ .MEMORY }} MB)
+      - 1x Worker Node (CPU: {{ .WORKER_CPU }}, Memory: {{ .WORKER_MEMORY }} MB)
 
       All nodes are created as Docker containers.
+
+      Install all default applications as well.
+    vars:
+      CPU: 2.0
+      MEMORY: 2048
+      WORKER_CPU: 2.0
+      WORKER_MEMORY: 2048
     cmds:
-      - talosctl cluster create --cpus 2.0 --cpus-workers 2.0 --memory 2048 --memory-workers 2048
+      - talosctl cluster create --cpus {{ .CPU }} --cpus-workers {{ .WORKER_CPU }} --memory {{ .MEMORY }} --memory-workers {{ .WORKER_MEMORY }}
+      - task: app:kubernetes-dashboard:install
 
   cluster:destroy:
     desc: Destroy a Talos cluster using talosctl
     cmds:
       - talosctl cluster destroy
-
-  cluster:apps:install-all:
-    desc: Install all applications on the Talos cluster
-    cmds:
-      - task: app:echoserver:install
-      - task: app:kubernetes-dashboard:install
 
   cluster:info:
     desc: Display information about the Talos cluster
@@ -38,6 +40,8 @@ tasks:
     desc: Display information about the Talos cluster nodes
     cmds:
       - kubectl get nodes -o wide
+
+  # ===============================================================================================
 
   helm:list:
     desc: List all Helm releases across all namespaces
@@ -81,25 +85,22 @@ tasks:
     cmds:
       - helm uninstall {{ .APP }} --namespace {{ .APP }}
 
-  app:echoserver:port-forward:*:
-    desc: Port-forward echoserver service to localhost
-    summary: |
-      Expose the echoserver service to localhost via port-forwarding.
-
-      - Param 0: Local port to forward to
-
-      When running in Vagrant, the local port must be 8000 to ensure the port is also forwarded to the host machine.
+  app:echoserver:port-forward:
+    desc: Expose the echoserver service to localhost via port-forwarding.
     vars:
-      LOCAL_PORT: '{{ index .MATCH 0 }}'
+      APP: echoserver
+      LOCAL_PORT: 8080
     cmds:
-      - task: kubectl:port-forward:echoserver:echoserver:{{ .LOCAL_PORT }}:8080
+      - task: kubectl:port-forward:{{ .APP }}:{{ .APP }}:{{ .LOCAL_PORT }}:8080
 
   # ===============================================================================================
 
   app:kubernetes-dashboard:install:
     desc: Install Kubernetes Dashboard Helm chart
     summary: |
-      Install the Kubernetes Dashboard Helm chart from the official repository (see <https://github.com/kubernetes/dashboard>).
+      Install the Kubernetes Dashboard Helm chart from the official repository.
+      See <https://github.com/kubernetes/dashboard> for more information.
+
       Create a cluster role binding to grant the dashboard admin privileges. Needed to see data from all namespaces.
     vars:
       APP: kubernetes-dashboard
@@ -115,17 +116,11 @@ tasks:
     cmds:
       - helm uninstall {{ .APP }} --namespace {{ .APP }}
 
-  app:kubernetes-dashboard:port-forward:*:
-    desc: Port-forward Kubernetes Dashboard service to localhost
-    summary: |
-      Expose the Kubernetes Dashboard service to localhost via port-forwarding.
-
-      - Param 0: Local port to forward to
-
-      When running in Vagrant, the local port must be 8000 to ensure the port is also forwarded to the host machine.
+  app:kubernetes-dashboard:port-forward:
+    desc: Expose the Kubernetes Dashboard service to localhost via port-forwarding.
     vars:
       APP: kubernetes-dashboard
-      LOCAL_PORT: '{{ index .MATCH 0 }}'
+      LOCAL_PORT: 8443
     cmds:
       - kubectl -n {{ .APP }} create token {{ .APP }}-kong
       - task: kubectl:port-forward:{{ .APP }}:{{ .APP }}-kong-proxy:{{ .LOCAL_PORT }}:443
