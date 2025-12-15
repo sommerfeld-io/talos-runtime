@@ -18,6 +18,7 @@
         "ansible/tasks/files",
 
         "manifests",
-        "helmcharts"
+        "helmcharts/*/charts/**",
+        "helmcharts/*/templates/**"
 	]
 }

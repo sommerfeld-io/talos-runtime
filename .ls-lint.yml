@@ -35,6 +35,9 @@ ls:
   .gitkeep: lowercase
   .shellcheckrc: lowercase
 
+  helmcharts/*:
+    Chart.yaml: PascalCase
+
 ignore:
   - ansible/roles/ansible-roles-collection
 
