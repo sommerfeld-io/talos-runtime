@@ -20,9 +20,9 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org)
-version: 0.1.0
+version: 0.5.0
 
 dependencies:
   - name: kube-prometheus-stack
-    version: 80.4.1 # https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+    version: 0.5.0
     repository: oci://ghcr.io/prometheus-community/charts
