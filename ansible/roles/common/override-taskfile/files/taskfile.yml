@@ -22,6 +22,7 @@ tasks:
     cmds:
       - talosctl cluster create --cpus {{ .CPU }} --cpus-workers {{ .WORKER_CPU }} --memory {{ .MEMORY }} --memory-workers {{ .WORKER_MEMORY }}
       - task: app:kubernetes-dashboard:install
+      - task: app:monitoring:install
 
   cluster:destroy:
     desc: Destroy a Talos cluster using talosctl
@@ -50,27 +51,6 @@ tasks:
 
   # ===============================================================================================
 
-  kubectl:port-forward:*:*:*:*:
-    desc: Port-forward a Kubernetes service to localhost
-    summary: |
-      Port-forward a Kubernetes service to localhost.
-
-      - Param 0: Namespace of the service
-      - Param 1: Name of the service
-      - Param 2: Local port to forward to
-      - Param 3: Remote port of the service
-
-      When running in Vagrant, the local port must be 8000 to ensure the port is also forwarded to the host machine.
-    vars:
-      NAMESPACE: '{{ index .MATCH 0 }}'
-      SVC_NAME: '{{ index .MATCH 1 }}'
-      LOCAL_PORT: '{{ index .MATCH 2 }}'
-      REMOTE_PORT: '{{ index .MATCH 3 }}'
-    cmds:
-      - kubectl -n {{ .NAMESPACE }} port-forward --address 0.0.0.0 svc/{{ .SVC_NAME }} {{ .LOCAL_PORT }}:{{ .REMOTE_PORT }}
-
-  # ===============================================================================================
-
   app:echoserver:install:
     desc: Install echoserver Helm chart
     vars:
@@ -86,12 +66,12 @@ tasks:
       - helm uninstall {{ .APP }} --namespace {{ .APP }}
 
   app:echoserver:port-forward:
-    desc: Expose the echoserver service to localhost via port-forwarding.
+    desc: Expose echoserver service to localhost via port-Expose forwarding
     vars:
       APP: echoserver
-      LOCAL_PORT: 8080
+      PORT: 8080
     cmds:
-      - task: kubectl:port-forward:{{ .APP }}:{{ .APP }}:{{ .LOCAL_PORT }}:8080
+      - kubectl -n {{ .APP }} port-forward --address 0.0.0.0 svc/{{ .APP }} {{ .PORT }}:{{ .PORT }}
 
   # ===============================================================================================
 
@@ -117,10 +97,39 @@ tasks:
       - helm uninstall {{ .APP }} --namespace {{ .APP }}
 
   app:kubernetes-dashboard:port-forward:
-    desc: Expose the Kubernetes Dashboard service to localhost via port-forwarding.
+    desc: Expose Kubernetes Dashboard service to localhost via port-Expose forwarding
     vars:
       APP: kubernetes-dashboard
-      LOCAL_PORT: 8443
+      PORT: 8443
     cmds:
       - kubectl -n {{ .APP }} create token {{ .APP }}-kong
-      - task: kubectl:port-forward:{{ .APP }}:{{ .APP }}-kong-proxy:{{ .LOCAL_PORT }}:443
+      - kubectl -n {{ .APP }} port-forward --address 0.0.0.0 svc/{{ .APP }} {{ .PORT }}:{{ .PORT }}
+
+  # ===============================================================================================
+
+  app:monitoring:install:
+    desc: Install {{ .APP }} Helm chart
+    vars:
+      NAMESPACE: monitoring
+      APP: monitoring
+    cmds:
+      - helm dependency update /vagrant/helmcharts/{{ .APP }}
+      - helm install {{ .APP }} /vagrant/helmcharts/{{ .APP }}  --create-namespace --namespace {{ .NAMESPACE }}
+
+  app:monitoring:uninstall:
+    desc: Uninstall {{ .APP }} Helm chart
+    vars:
+      NAMESPACE: monitoring
+      APP: monitoring
+    cmds:
+      - helm uninstall {{ .APP }} --namespace {{ .NAMESPACE }}
+
+  app:monitoring:port-forward:grafana:
+    desc: Expose {{ .APP }} to localhost via port-Expose forwarding
+    vars:
+      NAMESPACE: monitoring
+      APP: grafana
+      SERVICE_PORT: 80
+      FORWARD_PORT: 3000
+    cmds:
+      - kubectl -n {{ .NAMESPACE }} port-forward --address 0.0.0.0 svc/{{ .NAMESPACE }}-{{ .APP }} {{ .FORWARD_PORT }}:{{ .SERVICE_PORT }}

@@ -61,6 +61,29 @@ jobs:
         run: docker compose up "lint-$LINTER" --exit-code-from "lint-$LINTER"
         shell: bash
 
+  lint-helm-charts:
+    runs-on: ubuntu-latest
+    name: ${{ matrix.chart }}
+    strategy:
+      matrix:
+        chart: ['echoserver', 'monitoring']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Run lint-helm-${{ matrix.chart }} from docker-compose.yml
+        env:
+          CHART: ${{ matrix.chart }}
+        run: |
+          docker compose up "helm-$CHART-dependencies" --exit-code-from "helm-$CHART-dependencies"
+          docker compose up "helm-$CHART-lint" --exit-code-from "helm-$CHART-lint"
+        shell: bash
+
   files-should-exist:
     runs-on: ubuntu-latest
     steps:
@@ -83,6 +106,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [
       'lint',
+      'lint-helm-charts',
       'shellcheck',
       'files-should-exist',
     ]

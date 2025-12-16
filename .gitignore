@@ -15,3 +15,6 @@ node_modules
 .ansible
 
 .task/remote
+
+# helm charts
+helmcharts/*/charts
