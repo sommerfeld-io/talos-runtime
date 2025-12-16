@@ -1,6 +1,9 @@
 ---
 version: '3.42.1'
 
+vars:
+  BIND_ADDRESS: 0.0.0.0
+
 tasks:
 
   cluster:create:
@@ -71,7 +74,7 @@ tasks:
       APP: echoserver
       PORT: 8080
     cmds:
-      - kubectl -n {{ .APP }} port-forward --address 0.0.0.0 svc/{{ .APP }} {{ .PORT }}:{{ .PORT }}
+      - kubectl -n {{ .APP }} port-forward --address {{ .BIND_ADDRESS }} svc/{{ .APP }} {{ .PORT }}:{{ .PORT }}
 
   # ===============================================================================================
 
@@ -103,7 +106,7 @@ tasks:
       PORT: 8443
     cmds:
       - kubectl -n {{ .APP }} create token {{ .APP }}-kong
-      - kubectl -n {{ .APP }} port-forward --address 0.0.0.0 svc/{{ .APP }} {{ .PORT }}:{{ .PORT }}
+      - kubectl -n {{ .APP }} port-forward --address {{ .BIND_ADDRESS }} svc/{{ .APP }} {{ .PORT }}:{{ .PORT }}
 
   # ===============================================================================================
 
@@ -132,4 +135,4 @@ tasks:
       SERVICE_PORT: 80
       FORWARD_PORT: 3000
     cmds:
-      - kubectl -n {{ .NAMESPACE }} port-forward --address 0.0.0.0 svc/{{ .NAMESPACE }}-{{ .APP }} {{ .FORWARD_PORT }}:{{ .SERVICE_PORT }}
+      - kubectl -n {{ .NAMESPACE }} port-forward --address {{ .BIND_ADDRESS }} svc/{{ .NAMESPACE }}-{{ .APP }} {{ .FORWARD_PORT }}:{{ .SERVICE_PORT }}

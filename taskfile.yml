@@ -58,6 +58,11 @@ tasks:
     cmds:
       - for: ['yaml', 'filenames', 'folders', 'ansible'] # , 'workflows', 'markdown-links', 'k8s-manifests']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
+      - task: lint:helm
+
+  lint:helm:
+    desc: Run all Helm linters
+    cmds:
       - for: *helm-charts
         cmd: docker compose up helm-{{ .ITEM }}-dependencies --exit-code-from helm-{{ .ITEM }}-dependencies
       - for: *helm-charts
