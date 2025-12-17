@@ -56,5 +56,6 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 3000, host: 3000 # k8s app: grafana
   config.vm.network "forwarded_port", guest: 8080, host: 8080 # k8s app: echoserver
   config.vm.network "forwarded_port", guest: 8443, host: 8443 # k8s app: kubernetes-dashboard
+  config.vm.network "forwarded_port", guest: 9090, host: 9090 # k8s app: prometheus
 
 end

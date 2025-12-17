@@ -1331,7 +1331,7 @@
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Node / Fleet Overview",
-  "uid": "node_fleet_overview",
+  "title": "Summary / Node / Fleet Overview",
+  "uid": "summary-node-fleet-overview",
   "version": 1
 }

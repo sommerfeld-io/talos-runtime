@@ -4,6 +4,7 @@ kind: Namespace
 metadata:
   name: {{ .Values.namespaceOverride | default .Release.Name }}
   labels:
+    ## Needed for node-exporter
     pod-security.kubernetes.io/enforce: privileged
     pod-security.kubernetes.io/audit: privileged
     pod-security.kubernetes.io/warn: privileged

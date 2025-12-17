@@ -59,7 +59,7 @@ tasks:
     vars:
       APP: echoserver
     cmds:
-      - helm install {{ .APP }} /vagrant/helmcharts/{{ .APP }}  --create-namespace --namespace {{ .APP }}
+      - helm install {{ .APP }} /vagrant/helmcharts/{{ .APP }} --create-namespace --namespace {{ .APP }}
 
   app:echoserver:uninstall:
     desc: Uninstall echoserver Helm chart
@@ -117,7 +117,7 @@ tasks:
       APP: monitoring
     cmds:
       - helm dependency update /vagrant/helmcharts/{{ .APP }}
-      - helm install {{ .APP }} /vagrant/helmcharts/{{ .APP }}  --create-namespace --namespace {{ .NAMESPACE }}
+      - helm install {{ .APP }} /vagrant/helmcharts/{{ .APP }} --create-namespace --namespace {{ .NAMESPACE }}
 
   app:monitoring:uninstall:
     desc: Uninstall {{ .APP }} Helm chart
@@ -136,3 +136,12 @@ tasks:
       FORWARD_PORT: 3000
     cmds:
       - kubectl -n {{ .NAMESPACE }} port-forward --address {{ .BIND_ADDRESS }} svc/{{ .NAMESPACE }}-{{ .APP }} {{ .FORWARD_PORT }}:{{ .SERVICE_PORT }}
+
+  app:monitoring:port-forward:prometheus:
+    desc: Expose {{ .APP }} to localhost via port-Expose forwarding
+    vars:
+      NAMESPACE: monitoring
+      APP: prometheus-operated
+      PORT: 9090
+    cmds:
+      - kubectl -n {{ .NAMESPACE }} port-forward --address {{ .BIND_ADDRESS }} svc/{{ .NAMESPACE }}-{{ .APP }} {{ .PORT }}:{{ .PORT }}

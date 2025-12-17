@@ -1,5 +1,5 @@
 ---
-## Provide a name in place of kube-prometheus-stack for `app:` labels
+## Override the deployment namespace
 ##
 namespaceOverride: &namespaceOverride "monitoring"
 
