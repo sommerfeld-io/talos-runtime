@@ -1,3 +1,0 @@
----
-common_architecture: amd64
-common_version: v4.0.4 # https://github.com/helm/helm/releases
