@@ -32,10 +32,10 @@
   become: true
   tasks:
     - ansible.builtin.include_role:
-        name: roles/common/kubectl
+        name: roles/ansible-roles-collection/kubectl
+    - ansible.builtin.include_role:
+        name: roles/ansible-roles-collection/helm
     - ansible.builtin.include_role:
         name: roles/common/talosctl
-    - ansible.builtin.include_role:
-        name: roles/common/helm
     - ansible.builtin.include_role:
         name: roles/common/override-taskfile

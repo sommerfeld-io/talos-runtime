@@ -11,23 +11,6 @@ includes:
 
 tasks:
 
-  sync:assets-from-github:
-    desc: Sync assets from the central sommerfeldio/.github repository
-    cmds:
-      - echo "Syncing assets from the central sommerfeldio/.github repository..."
-      - task: common:download
-        vars: { DEST: ".github/copilot-instructions.md", URL: "{{ .REPO }}/refs/heads/main/.github/copilot-instructions.md" }
-      - task: common:download
-        vars: { DEST: ".vscode/settings.json", URL: "{{ .REPO }}/refs/heads/main/.vscode/settings.json" }
-      - task: common:download
-        vars: { DEST: ".github/workflows/codeql.yml", URL: "{{ .REPO }}/refs/heads/main/.github/workflows/codeql.yml" }
-      - task: common:download
-        vars: { DEST: ".github/workflows/housekeeping-issues.yml", URL: "{{ .REPO }}/refs/heads/main/.github/workflows/housekeeping-issues.yml" }
-      - task: common:download
-        vars: { DEST: ".github/workflows/housekeeping-labels.yml", URL: "{{ .REPO }}/refs/heads/main/.github/workflows/housekeeping-labels.yml" }
-
-  # ===============================================================================================
-
   update:
     desc: Update project dependencies and submodules
     cmds:
@@ -37,6 +20,8 @@ tasks:
     desc: Cleanup the environment
     cmds:
       - docker compose down --remove-orphans
+      - docker container prune -f
+      - docker volume prune -f
       - rm -rf .cache
       - rm -rf .vagrant
       - rm -rf node_modules
@@ -58,6 +43,11 @@ tasks:
     cmds:
       - for: ['yaml', 'filenames', 'folders', 'ansible'] # , 'workflows', 'markdown-links', 'k8s-manifests']
         cmd: docker compose up lint-{{ .ITEM }} --exit-code-from lint-{{ .ITEM }}
+      - task: lint:helm
+
+  lint:helm:
+    desc: Run all Helm linters
+    cmds:
       - for: *helm-charts
         cmd: docker compose up helm-{{ .ITEM }}-dependencies --exit-code-from helm-{{ .ITEM }}-dependencies
       - for: *helm-charts

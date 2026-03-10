@@ -19,13 +19,12 @@ on:
 env:
   REGISTRY: docker.io
 
-permissions:
-  contents: read
-
 jobs:
 
   shellcheck:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -42,6 +41,8 @@ jobs:
 
   lint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     name: ${{ matrix.linter }}
     strategy:
       matrix:
@@ -63,6 +64,8 @@ jobs:
 
   lint-helm-charts:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     name: ${{ matrix.chart }}
     strategy:
       matrix:
@@ -103,14 +106,15 @@ jobs:
   # ----- Release stage ---------------------------------------------------------------------------
 
   release-code:
-    runs-on: ubuntu-latest
+    uses: sommerfeld-io/.github/.github/workflows/lib-release-code.yml@main
     needs: [
       'lint',
       'lint-helm-charts',
       'shellcheck',
-      'files-should-exist',
     ]
     if: ${{ (github.actor != 'dependabot[bot]') && (github.ref == 'refs/heads/main') }}
+    secrets:
+      GH_TOKEN_REPO_AND_PROJECT: ${{ secrets.GH_TOKEN_REPO_AND_PROJECT }}
     permissions:
       contents: write
     steps:

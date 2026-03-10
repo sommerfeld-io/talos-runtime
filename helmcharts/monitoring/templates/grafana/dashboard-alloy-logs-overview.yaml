@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-alloy-logs-overview
+  labels:
+    grafana_dashboard: "1"
+data:
+  alloy-logs-overview.json: |-
+    {{ .Files.Get "dashboards/alloy-logs-overview.json" | toJson | indent 4 }}

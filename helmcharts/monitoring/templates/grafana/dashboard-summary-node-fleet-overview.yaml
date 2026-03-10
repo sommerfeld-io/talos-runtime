@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-summary-node-fleet-overview
+  labels:
+    grafana_dashboard: "1"
+data:
+  summary-node-fleet-overview.json: |-
+    {{ .Files.Get "dashboards/summary-node-fleet-overview.json" | toJson | indent 4 }}

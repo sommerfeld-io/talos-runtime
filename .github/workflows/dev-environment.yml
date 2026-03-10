@@ -12,11 +12,6 @@ on:
     - cron: '0 1 * * 2'
   workflow_dispatch:
 
-env:
-  IMAGE_NAME: devcontainer
-  CONTEXT: .devcontainer
-  DOCKERFILE: Dockerfile
-
 jobs:
   devcontainer:
     permissions:

@@ -19,6 +19,7 @@
 
         "manifests",
         "helmcharts/*/charts/**",
-        "helmcharts/*/templates/**"
+        "helmcharts/*/templates/**",
+        "helmcharts/monitoring/dashboards"
 	]
 }

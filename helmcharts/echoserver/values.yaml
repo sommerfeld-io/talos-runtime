@@ -1,1 +1,12 @@
 ---
+resources:
+  ## We do not set default resources so that a conscious decision is made for each cluster in the respective `x-argocd-autopilot`
+  ## repository. If resources should be explicitly set, remove the commented-out lines, adjust the values accordingly, and remove
+  ## the curly braces after `resources:`.
+  limits:
+    cpu: "125m"
+    memory: "128Mi"
+  requests:
+    cpu: "10m"
+    memory: "8Mi"
+    ephemeral-storage: "64Mi"

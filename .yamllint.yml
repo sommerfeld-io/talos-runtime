@@ -5,6 +5,8 @@ ignore: |
   node_modules
   .vagrant
   target
+  helmcharts/*/charts
+  helmcharts/*/templates
 
 rules:
   line-length:

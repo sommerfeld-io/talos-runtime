@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-alloy-prometheus-components
+  labels:
+    grafana_dashboard: "1"
+data:
+  alloy-prometheus-components.json: |-
+    {{ .Files.Get "dashboards/alloy-prometheus-components.json" | toJson | indent 4 }}
